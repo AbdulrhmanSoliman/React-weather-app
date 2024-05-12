@@ -1,0 +1,17 @@
+{
+  "testing Typography": "اهلا بالعالم",
+  "Show Weather": "اعرض الطقس",
+  "City Name": "اسم المدينة",
+  "min": "الصغرى",
+  "max": "الكبرى",
+  "Search for another city": "البحث عن مدينة اخرى",
+  "clear sky": "سماء صافية",
+  "few clouds": "غيوم قليلة",
+  "scattered clouds": "غيوم متناثرة",
+  "broken clouds": "غيوم متقطعة",
+  "shower rain": "مطر خفيف",
+  "light rain": "مطر خفيف",
+  "Mist": "ضباب",
+  "Snow": "مثلج",
+  "Thunderstorm": "عاصفة رعدية"
+}
