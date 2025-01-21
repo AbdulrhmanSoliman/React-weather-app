@@ -14,9 +14,10 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Content() {
-  let [clicked, setClicked] = useState(false);
+  let [clicked, setClicked] = useState(false); // this state to control weather component show or unshow
   let [cityInput, setCityInput] = useState("");
   let [local, setLocal] = useState("ar");
+  let [showError, setShowError] = useState(false);
   const { t, i18n } = useTranslation();
 
   window.addEventListener("keydown", (e) => {
@@ -41,7 +42,16 @@ export default function Content() {
     i18n.changeLanguage("ar");
   }, [i18n]);
 
-  let citySelected = (
+  function handleClick() {
+    if (cityInput !== "") {
+      setClicked(true);
+      setShowError(false);
+    } else {
+      setShowError(true);
+    }
+  }
+
+  let weatherInputJSX = (
     <Stack gap={3} flexDirection="row" flexWrap="wrap">
       <TextField
         id="outlined-basic"
@@ -56,7 +66,7 @@ export default function Content() {
       />
       <Button
         variant="contained"
-        onClick={() => setClicked(true)}
+        onClick={handleClick}
         style={{ flex: 1, minWidth: "9rem" }}
       >
         {t("Show Weather")}
@@ -89,15 +99,15 @@ export default function Content() {
       </Button>
       <Card
         sx={{
-          background: "#ccc",
+          background: "#eee",
           color: "#0E1217",
-          borderRadius: "18px",
+          borderRadius: "12px",
           border: "2px solid white",
         }}
       >
         <CardContent>
           {clicked === false ? (
-            citySelected
+            weatherInputJSX
           ) : (
             <Weather
               btnClick={setClicked}
@@ -106,6 +116,9 @@ export default function Content() {
             />
           )}
         </CardContent>
+        {showError && (
+          <p style={{ color: "#e83b46" }}>{t("Please type a city name")}</p>
+        )}
       </Card>
     </Container>
   );
