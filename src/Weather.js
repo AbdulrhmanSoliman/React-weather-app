@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as Humidity } from "./humidity.svg";
 import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 import moment from "moment";
 import "moment/min/locales.min";
