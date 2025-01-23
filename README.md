@@ -13,6 +13,7 @@ The Weather App is a simple application that allows users to get real-time weath
 - User-friendly interface with intuitive design
 - Responsive layout for seamless experience on different devices
 - Support for displaying content in Arabic and English
+- Better error handling
 
 ## Installation
 
