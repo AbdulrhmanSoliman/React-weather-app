@@ -100,7 +100,7 @@ export default function Content() {
       <Card
         sx={{
           background: "#eee",
-          color: "#0E1217",
+          color: "#87ceeb",
           borderRadius: "12px",
           border: "2px solid white",
         }}
