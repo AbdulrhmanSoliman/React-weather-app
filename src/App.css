@@ -30,13 +30,11 @@
   font-weight: 700;
 }
 
-#outlined-basic{
-  /* flex: 3; */
+#outlined-basic {
   min-width: 15rem;
   font-size: 18px;
 }
-#show-weather-btn{
-  /* flex: 1; */
+#show-weather-btn {
   min-width: 9rem;
   font-size: 16px;
 }
