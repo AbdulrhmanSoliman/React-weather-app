@@ -99,8 +99,8 @@ export default function Content() {
       </Button>
       <Card
         sx={{
-          background: "#eee",
-          color: "#87ceeb",
+          background: "skyblue",
+          color: "#000000de",
           borderRadius: "12px",
           border: "2px solid white",
         }}
