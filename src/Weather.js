@@ -6,6 +6,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as Humidity } from "./humidity.svg";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 import moment from "moment";
 import "moment/min/locales.min";
@@ -15,6 +17,8 @@ export default function Weather({ btnClick, cityValue, localState }) {
   let [weatherData, setWeatherData] = useState({});
   let [desc, setDesc] = useState({});
   let [timing, setTiming] = useState("");
+  let [cityNotFound, setCityNotFound] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // loading state until the api response
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -37,30 +41,23 @@ export default function Weather({ btnClick, cityValue, localState }) {
       .then(function (res) {
         setWeatherData(res.data.main);
         setDesc(res.data.weather[0]);
+        setCityNotFound(false);
+        setIsLoading(false);
       })
       .catch(function (error) {
         // handle error
-        console.log(error);
+        if (error.response) {
+          // if the server response with an error
+          setCityNotFound(true);
+          setIsLoading(false);
+        }
       });
     // cancel the request
     return () => controller.abort();
   }, [cityValue, localState, i18n]);
 
-  function toFixed2(value) {
-    return Number(value).toFixed(1);
-  }
-  return (
-    <>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        gap={2}
-      >
-        <Typography variant="h4">{cityValue}</Typography>
-        <Typography variant="h6">{timing}</Typography>
-      </Stack>
-      <Divider style={{ background: "#ccc", marginBlock: "1rem" }} />
+  function weatherDataRender() {
+    const weatherDataJSX = (
       <Stack direction="row" alignItems="center" justifyContent="space-evenly">
         <div>
           <Typography variant="h3">{toFixed2(weatherData.temp)}°C</Typography>
@@ -92,7 +89,42 @@ export default function Weather({ btnClick, cityValue, localState }) {
           className="weatherIcon"
         />
       </Stack>
-      <Button variant="contained" onClick={() => btnClick(false)}>
+    );
+    const NotFound = (
+      <Typography variant="h6">{t("This city is not found")}</Typography>
+    );
+    if (cityNotFound) {
+      return NotFound;
+    } else {
+      return weatherDataJSX;
+    }
+  }
+
+  function toFixed2(value) {
+    return Number(value).toFixed(1);
+  }
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+  return (
+    <>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        gap={2}
+      >
+        <Typography variant="h4">{cityValue}</Typography>
+        <Typography variant="h6">{timing}</Typography>
+      </Stack>
+      <Divider style={{ background: "#ccc", marginBlock: "1rem" }} />
+      {weatherDataRender()}
+      <Button
+        variant="contained"
+        style={{ marginTop: "1rem" }}
+        onClick={() => btnClick(false)}
+      >
         {t("Search for another city")}
       </Button>
     </>
