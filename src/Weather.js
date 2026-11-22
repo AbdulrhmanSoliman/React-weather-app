@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as Humidity } from "./humidity.svg";
 import CircularProgress from "@mui/material/CircularProgress";
+import WeatherIcon from "./WeatherIcon";
 
 import moment from "moment";
 import "moment/min/locales.min";
@@ -55,42 +56,57 @@ export default function Weather({ btnClick, cityValue, localState }) {
     return () => controller.abort();
   }, [cityValue, localState, i18n]);
 
+  // expose the current condition to the page background theme
+  useEffect(() => {
+    if (desc.icon) {
+      document.body.dataset.weather = desc.icon;
+    }
+    return () => {
+      delete document.body.dataset.weather;
+    };
+  }, [desc.icon]);
+
   function weatherDataRender() {
     const weatherDataJSX = (
-      <Stack direction="row" alignItems="center" justifyContent="space-evenly">
+      <Stack
+        className="weather-data"
+        direction="row"
+        alignItems="center"
+        justifyContent="space-evenly"
+      >
         <div>
-          <Typography variant="h3">{toFixed2(weatherData.temp)}°C</Typography>
+          <Typography variant="h3" sx={{ color: "inherit" }}>
+            {toFixed2(weatherData.temp)}°C
+          </Typography>
           <Stack
             direction="row"
             justifyContent="center"
             alignItems="center"
             mt={2}
           >
-            <Typography variant="h5" flex={1}>
+            <Typography variant="h5" flex={1} sx={{ color: "inherit" }}>
               {t(desc.description)}
             </Typography>
             <span> {weatherData.humidity}% </span>
             <Humidity style={{ maxWidth: "20px" }} />
           </Stack>
           <Stack direction="row" alignItems="center" mt={1}>
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" sx={{ color: "inherit" }}>
               {t("min")} {toFixed2(weatherData.temp_min)} °C
             </Typography>
             <span style={{ marginInline: "10px" }}> | </span>
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" sx={{ color: "inherit" }}>
               {t("max")} {toFixed2(weatherData.temp_max)} °C
             </Typography>
           </Stack>
         </div>
-        <img
-          src={`https://openweathermap.org/img/wn/${desc.icon}@4x.png`}
-          alt="weather-icon"
-          className="weatherIcon"
-        />
+        <WeatherIcon icon={desc.icon} description={t(desc.description)} />
       </Stack>
     );
     const NotFound = (
-      <Typography variant="h6">{t("This city is not found")}</Typography>
+      <Typography variant="h6" sx={{ color: "inherit" }}>
+        {t("This city is not found")}
+      </Typography>
     );
     if (cityNotFound) {
       return NotFound;
@@ -104,7 +120,7 @@ export default function Weather({ btnClick, cityValue, localState }) {
   }
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <CircularProgress color="inherit" />;
   }
   return (
     <>
@@ -114,10 +130,14 @@ export default function Weather({ btnClick, cityValue, localState }) {
         justifyContent="space-between"
         gap={2}
       >
-        <Typography variant="h4">{cityValue}</Typography>
-        <Typography variant="h6">{timing}</Typography>
+        <Typography variant="h4" sx={{ color: "inherit" }}>
+          {cityValue}
+        </Typography>
+        <Typography variant="h6" sx={{ color: "inherit" }}>
+          {timing}
+        </Typography>
       </Stack>
-      <Divider style={{ background: "#ccc", marginBlock: "1rem" }} />
+      <Divider className="weather-divider" />
       {weatherDataRender()}
       <Button
         variant="contained"

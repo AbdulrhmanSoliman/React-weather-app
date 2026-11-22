@@ -5,10 +5,139 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #2196f3;
+  /* default sky */
+  background: linear-gradient(160deg, #1e88e5, #1565c0 55%, #0d3c78);
+  background-attachment: fixed;
+  min-height: 100vh;
+  transition: background 0.8s ease;
+}
+
+/* Ambient drifting light blobs (lightweight, two pseudo-elements only) */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  width: 42vmax;
+  height: 42vmax;
+  top: -12vmax;
+  inset-inline-start: -10vmax;
+  background: radial-gradient(circle, #ffffff, transparent 65%);
+  animation: blob-float-a 26s ease-in-out infinite;
+}
+
+body::after {
+  width: 36vmax;
+  height: 36vmax;
+  bottom: -14vmax;
+  inset-inline-end: -8vmax;
+  background: radial-gradient(circle, #90caf9, transparent 65%);
+  animation: blob-float-b 32s ease-in-out infinite;
+}
+
+@keyframes blob-float-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(6vmax, 4vmax);
+  }
+}
+
+@keyframes blob-float-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-5vmax, -6vmax);
+  }
+}
+
+/* ===== Condition-based backgrounds (day = bright, night = deep) ===== */
+
+/* clear sky */
+body[data-weather="01d"] {
+  background: linear-gradient(160deg, #29b6f6, #1e88e5 55%, #ffb300 140%);
+}
+body[data-weather="01n"] {
+  background: linear-gradient(160deg, #0d1b3e, #1a237e 60%, #000051);
+}
+
+/* few clouds */
+body[data-weather="02d"] {
+  background: linear-gradient(160deg, #4fc3f7, #039be5 60%, #546e7a 140%);
+}
+body[data-weather="02n"] {
+  background: linear-gradient(160deg, #102027, #1c313a 60%, #263238);
+}
+
+/* scattered clouds */
+body[data-weather="03d"] {
+  background: linear-gradient(160deg, #78909c, #546e7a 60%, #37474f);
+}
+body[data-weather="03n"] {
+  background: linear-gradient(160deg, #131c24, #263238 60%, #102027);
+}
+
+/* broken / overcast clouds */
+body[data-weather="04d"] {
+  background: linear-gradient(160deg, #607d8b, #455a64 60%, #263238);
+}
+body[data-weather="04n"] {
+  background: linear-gradient(160deg, #0e151b, #1c262c 60%, #263238);
+}
+
+/* shower rain / rain */
+body[data-weather="09d"],
+body[data-weather="10d"] {
+  background: linear-gradient(160deg, #33608d, #2c4a6e 55%, #1b2a41);
+}
+body[data-weather="09n"],
+body[data-weather="10n"] {
+  background: linear-gradient(160deg, #16222e, #1c2f42 60%, #0e1620);
+}
+
+/* thunderstorm */
+body[data-weather="11d"] {
+  background: linear-gradient(160deg, #3b3d5c, #2b2d42 55%, #1d1f33);
+}
+body[data-weather="11n"] {
+  background: linear-gradient(160deg, #191a2e, #21223a 60%, #101223);
+}
+
+/* snow */
+body[data-weather="13d"] {
+  background: linear-gradient(160deg, #7fa8c9, #5c84a8 55%, #3d5a80);
+}
+body[data-weather="13n"] {
+  background: linear-gradient(160deg, #1b2a3d, #243b55 60%, #141e30);
+}
+
+/* mist / fog */
+body[data-weather="50d"] {
+  background: linear-gradient(160deg, #78909c, #607d8b 55%, #455a64);
+}
+body[data-weather="50n"] {
+  background: linear-gradient(160deg, #1a2327, #263238 60%, #10171b);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
 }
